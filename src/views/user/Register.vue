@@ -180,6 +180,7 @@ export default {
     },
     // 获取令牌
     getRegisterToken() {
+      this.$message.success("正在获取令牌...")
       fetchRegisterToken({email: this.ruleForm.email}).then(() => {
         this.$message.success("令牌已发送至您的邮箱，请注意查收！")
       }).catch(err => {

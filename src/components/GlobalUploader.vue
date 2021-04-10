@@ -62,7 +62,6 @@ export default {
         // 服务器分片校验函数，秒传及断点续传基础
         checkChunkUploadedByResponse: function (chunk, message) {
           console.log("==========checkChunkUploadedByResponse=======")
-          console.log(chunk, message);
           let objMessage = JSON.parse(message);
           if (objMessage.skipUpload) {
             return true;

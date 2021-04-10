@@ -126,7 +126,7 @@ export default {
     // 文件类型
     currentFileType: {
       get() {
-        return Number(this.$route.query.fileType)
+        return this.$route.query.fileType
       },
       set() {
         return this.FILE_TYPE.ALL
@@ -149,6 +149,7 @@ export default {
       if (this.isLoginPage()){
         return
       }
+      console.log(oldValue, "=============>" ,newValue)
       if (oldValue === this.FILE_TYPE.IMAGE && this.fileModel().isTimeLine()) {
         this.$store.commit('changeFileModel', this.FILE_MODEL.TABLE)
       }
