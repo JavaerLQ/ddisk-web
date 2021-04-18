@@ -5,9 +5,13 @@
       <div class="info">
         <img class="logo" :src="logoUrl" />
         <div class="link-wrapper" align="middle">
-          <div class="info-website">Author：Richard</div>
-          <div class="info-email">Email：974102233@qq.com</div>
-          <div class="info-welcome">感谢奇文社区，前端基于奇文网盘二次开发，后端为自主研发产品。</div>
+          <div class="info-website">Author: Richard</div>
+          <div class="info-email">Email：<a href="mailto: 974102233@qq.com">974102233@qq.com</a></div>
+          <div class="info-welcome"><b>
+            <p>体验账号:superman 密码:1234567</p>
+            <p><font color="red">温馨提示：使用体验账号很可能会被挤下线，如需更好的体验，请自行注册账号！</font></p>
+          </b>
+          </div>
         </div>
       </div>
       <div class="code-2-img-wrapper">
