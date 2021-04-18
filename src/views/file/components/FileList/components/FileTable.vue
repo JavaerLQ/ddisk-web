@@ -36,7 +36,8 @@
           <span
               style="cursor: pointer;"
               title="点击跳转"
-              @click="$router.push({ query: { pid: scope.row.pid, fileType: FILE_TYPE.ALL } })" v-text="getFilePath(scope.row.pid)"></span>
+              @click="$router.push({ query: { pid: scope.row.pid, fileType: FILE_TYPE.ALL } })"
+              v-text="getFilePath(scope.row.pid)"></span>
         </template>
       </el-table-column>
       <el-table-column
@@ -99,11 +100,15 @@
         <template slot-scope="scope">
           <div v-if="operaColumnExpand">
             <el-button type="danger" size="mini" @click.native="deleteFileBtn(scope.row)">删除</el-button>
-            <el-button type="success" size="mini" @click.native="recoverFileBtn(scope.row)" v-if="fileType().isRecycle()">恢复</el-button>
+            <el-button type="success" size="mini" @click.native="recoverFileBtn(scope.row)"
+                       v-if="fileType().isRecycle()">恢复
+            </el-button>
             <el-button type="primary" size="mini" @click.native="showMoveFileDialog(scope.row)"
-                       v-if="fileType().isNotRecycle()">移动</el-button>
+                       v-if="fileType().isNotRecycle()">移动
+            </el-button>
             <el-button type="primary" size="mini" @click.native="renameFile(scope.row)"
-                       v-if="fileType().isNotRecycle()">重命名</el-button>
+                       v-if="fileType().isNotRecycle()">重命名
+            </el-button>
             <el-button type="success" size="mini" v-if="scope.row.dir==false && fileType().isNotRecycle()">
               <a
                   target="_blank"
@@ -128,17 +133,17 @@
             </el-button>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item @click.native="deleteFileBtn(scope.row)">删除</el-dropdown-item>
-              <el-dropdown-item @click.native="recoverFileBtn(scope.row)" v-if="fileType().isRecycle()">恢复
+              <el-dropdown-item @click.native="recoverFileBtn(scope.row)" v-show="fileType().isRecycle()">恢复
               </el-dropdown-item>
-              <el-dropdown-item @click.native="showMoveFileDialog(scope.row)" v-if="fileType().isNotRecycle()">移动
+              <el-dropdown-item @click.native="showMoveFileDialog(scope.row)" v-show="fileType().isNotRecycle()">移动
               </el-dropdown-item>
-              <el-dropdown-item @click.native="renameFile(scope.row)" v-if="fileType().isNotRecycle()">重命名
+              <el-dropdown-item @click.native="renameFile(scope.row)" v-show="fileType().isNotRecycle()">重命名
               </el-dropdown-item>
               <!--              <el-dropdown-item-->
               <!--                  v-if="scope.row.extension === 'zip' && fileType().isNotRecycle()"-->
               <!--                  @click.native="unzipFile(scope.row)">解压缩-->
               <!--              </el-dropdown-item>-->
-              <el-dropdown-item v-if="scope.row.dir == false && fileType().isNotRecycle()">
+              <el-dropdown-item v-show="scope.row.dir == false && fileType().isNotRecycle()">
                 <a
                     target="_blank"
                     style="display: block;color: inherit;"
@@ -181,7 +186,7 @@ export default {
   },
   computed: {
     //  selectedColumnList:判断当前用户设置的左侧栏是否折叠, operaColumnExpand:判断当前用户设置的操作列是否展开
-    ...mapGetters(['selectedColumnList', 'operaColumnExpand','getFilePath']),
+    ...mapGetters(['selectedColumnList', 'operaColumnExpand', 'getFilePath']),
     //  判断当前路径下是否有普通文件
     isIncludeNormalFile() {
       return this.fileList.map((data) => data.dir).includes(false)
@@ -285,7 +290,7 @@ export default {
         //  若当前点击项是视频mp4格式
         if (this.VIDEO_TYPE_LIST.includes(row.extension)) {
           let data = {
-            visible : true,
+            visible: true,
             url: this.getDownloadPath(row.id),
             filename: row.filename + '.' + row.extension
           }
@@ -294,7 +299,7 @@ export default {
         //  若当前点击项是视频mp3格式
         if (this.MUSIC_TYPE_LIST.includes(row.extension)) {
           let data = {
-            visible : true,
+            visible: true,
             url: this.getDownloadPath(row.id),
             filename: row.filename + '.' + row.extension
           }
@@ -334,11 +339,11 @@ export default {
         background: 'rgba(0, 0, 0, 0.7)'
       })
       unzipfile(fileInfo).then(() => {
-          this.$emit('getTableDataByType')
-          this.$store.dispatch('showStorage')
-          this.$message.success('解压成功')
-          loading.close()
-      }).catch(err=>{
+        this.$emit('getTableDataByType')
+        this.$store.dispatch('showStorage')
+        this.$message.success('解压成功')
+        loading.close()
+      }).catch(err => {
         console.log(err)
         this.$message.error("系统忙，解压失败")
       })
@@ -347,7 +352,7 @@ export default {
     /**
      * 恢复按钮事件
      */
-    recoverFileBtn(fileInfo){
+    recoverFileBtn(fileInfo) {
       let data = {
         userFileId: fileInfo.id
       }
@@ -357,12 +362,16 @@ export default {
           cancelButtonText: '取消',
           type: 'success'
         }).then(() => {
-          recoverRecycleFile(data).then(()=>
-              this.$message({
-                type: 'success',
-                message: filenameComplete(fileInfo) + '已恢复'
-              })
-          )
+          recoverRecycleFile(data).then(() => {
+            this.$message({
+              type: 'success',
+              message: filenameComplete(fileInfo) + '已恢复'
+            })
+            this.$emit('getTableDataByType')
+            this.$store.dispatch('showStorage')
+            this.$store.dispatch('fetchPathTreeMap')
+          }
+        )
         }).catch(() => {
           this.$message({
             type: 'info',
@@ -435,10 +444,10 @@ export default {
         inputValue: filename
       }).then(({value}) => {
         let name = filenameSplit(value)
-        if (!name.filename){
+        if (!name.filename) {
           throw new Error("错误文件名")
         }
-        if (fileInfo.filename===name.filename && fileInfo.extension===name.extension){
+        if (fileInfo.filename === name.filename && fileInfo.extension === name.extension) {
           throw new Error("文件名未发生改变")
         }
         fileInfo.oldFilename = fileInfo.filename
@@ -460,14 +469,14 @@ export default {
         userFileId: fileInfo.id,
         filename: fileInfo.filename
       }
-      if (!fileInfo.dir){
+      if (!fileInfo.dir) {
         data.extension = fileInfo.extension
       }
       renameFile(data).then(() => {
-          this.$emit('getTableDataByType')
-          this.$store.dispatch('showStorage')
-          this.$message.success('重命名成功')
-      }).catch((err)=>{
+        this.$emit('getTableDataByType')
+        this.$store.dispatch('showStorage')
+        this.$message.success('重命名成功')
+      }).catch((err) => {
         fileInfo.filename = fileInfo.oldFilename
         fileInfo.extension = fileInfo.oldExtension
         console.error(err)

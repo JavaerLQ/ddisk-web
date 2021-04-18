@@ -149,7 +149,6 @@ export default {
       if (this.isLoginPage()){
         return
       }
-      console.log(oldValue, "=============>" ,newValue)
       if (oldValue === this.FILE_TYPE.IMAGE && this.fileModel().isTimeLine()) {
         this.$store.commit('changeFileModel', this.FILE_MODEL.TABLE)
       }

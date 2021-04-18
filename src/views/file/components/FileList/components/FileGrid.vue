@@ -30,11 +30,13 @@
     <transition name="el-fade-in-linear">
       <div class="right-menu" v-show="rightMenu.isShow" :style="`top: ${rightMenu.top}px; left: ${rightMenu.left}px;`">
         <el-button type="info" size="small" plain @click.native="deleteFileBtn(selectedFile)">删除</el-button>
-        <el-button type="info" size="small" plain @click.native="showMoveFileDialog(selectedFile)" v-if="fileType().isNotRecycle()"
+        <el-button type="info" size="small" plain @click.native="recoverFileBtn(selectedFile)" v-show="fileType().isRecycle()">恢复</el-button>
+        <el-button type="info" size="small" plain @click.native="showMoveFileDialog(selectedFile)"
+                   v-show="fileType().isNotRecycle()"
         >移动
-        </el-button
-        >
-        <el-button type="info" size="small" plain @click.native="renameFile(selectedFile)" v-if="fileType().isNotRecycle()"
+        </el-button>
+        <el-button type="info" size="small" plain @click.native="renameFile(selectedFile)"
+                   v-show="fileType().isNotRecycle()"
         >重命名
         </el-button
         >
@@ -42,7 +44,7 @@
             type="info"
             size="small"
             plain
-            v-if="selectedFile.dir === 0 && fileType().isNotRecycle()"
+            v-show="selectedFile.dir == false && fileType().isNotRecycle()"
             @click.native="rightMenu.isShow = false"
         >
           <a
@@ -53,15 +55,15 @@
           >下载</a
           >
         </el-button>
-<!--        <el-button-->
-<!--            type="info"-->
-<!--            size="small"-->
-<!--            plain-->
-<!--            @click.native="unzipFile(selectedFile)"-->
-<!--            v-if="fileType.isNotRecycle() && (selectedFile.extension == 'zip' || selectedFile.extension == 'rar')"-->
-<!--        >解压缩-->
-<!--        </el-button-->
-<!--        >-->
+        <!--        <el-button-->
+        <!--            type="info"-->
+        <!--            size="small"-->
+        <!--            plain-->
+        <!--            @click.native="unzipFile(selectedFile)"-->
+        <!--            v-if="fileType.isNotRecycle() && (selectedFile.extension == 'zip' || selectedFile.extension == 'rar')"-->
+        <!--        >解压缩-->
+        <!--        </el-button-->
+        <!--        >-->
       </div>
     </transition>
   </div>
@@ -284,7 +286,7 @@ export default {
         this.$store.dispatch('showStorage')
         this.$message.success('解压成功')
         loading.close()
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err)
         this.$message.error("系统忙，解压失败")
       })
@@ -293,7 +295,7 @@ export default {
     /**
      * 恢复按钮事件
      */
-    recoverFileBtn(fileInfo){
+    recoverFileBtn(fileInfo) {
       let data = {
         userFileId: fileInfo.id
       }
@@ -303,11 +305,15 @@ export default {
           cancelButtonText: '取消',
           type: 'success'
         }).then(() => {
-          recoverRecycleFile(data).then(()=>
-              this.$message({
-                type: 'success',
-                message: filenameComplete(fileInfo) + '已恢复'
-              })
+          recoverRecycleFile(data).then(() => {
+                this.$message({
+                  type: 'success',
+                  message: filenameComplete(fileInfo) + '已恢复'
+                })
+                this.$emit('getTableDataByType')
+                this.$store.dispatch('showStorage')
+                this.$store.dispatch('fetchPathTreeMap')
+              }
           )
         }).catch(() => {
           this.$message({
@@ -381,10 +387,10 @@ export default {
         inputValue: filename
       }).then(({value}) => {
         let name = filenameSplit(value)
-        if (!name.filename){
+        if (!name.filename) {
           throw new Error("错误文件名")
         }
-        if (fileInfo.filename===name.filename && fileInfo.extension===name.extension){
+        if (fileInfo.filename === name.filename && fileInfo.extension === name.extension) {
           throw new Error("文件名未发生改变")
         }
         fileInfo.oldFilename = fileInfo.filename
@@ -406,14 +412,14 @@ export default {
         userFileId: fileInfo.id,
         filename: fileInfo.filename
       }
-      if (!fileInfo.dir){
+      if (!fileInfo.dir) {
         data.extension = fileInfo.extension
       }
       renameFile(data).then(() => {
         this.$emit('getTableDataByType')
         this.$store.dispatch('showStorage')
         this.$message.success('重命名成功')
-      }).catch((err)=>{
+      }).catch((err) => {
         fileInfo.filename = fileInfo.oldFilename
         fileInfo.extension = fileInfo.oldExtension
         console.error(err)

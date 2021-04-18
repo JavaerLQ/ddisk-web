@@ -33,7 +33,7 @@
     <!-- 视频查看 -->
     <video-player class="my-player"
                   ref="videoPlayer"
-                  :playsinline="true"
+                  :playsinline="false"
                   @playing="onPlayerPlaying($event)"
                   @ended="onPlayerEnded($event)"
                   :options="playerOptions">

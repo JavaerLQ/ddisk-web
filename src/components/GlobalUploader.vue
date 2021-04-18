@@ -60,9 +60,10 @@ export default {
         forceChunkSize: true,
         testChunks: true,   //是否开启服务器分片校验
         // 服务器分片校验函数，秒传及断点续传基础
-        checkChunkUploadedByResponse: function (chunk, message) {
+        checkChunkUploadedByResponse: (chunk, data)=>{
           console.log("==========checkChunkUploadedByResponse=======")
-          let objMessage = JSON.parse(message);
+          console.log(data)
+          let objMessage = JSON.parse(data);
           if (objMessage.skipUpload) {
             return true;
           }
@@ -118,6 +119,7 @@ export default {
         this.statusSet(file.id, "merging")
         mergeFile({
           filename: file.name,
+          // chunkSize: chunk.chunkSize,
           folderId: this.filePath().current(),
           identifier: file.uniqueIdentifier
         }).then(data => {
