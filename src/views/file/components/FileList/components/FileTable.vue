@@ -17,7 +17,7 @@
       <el-table-column type="selection" width="55"></el-table-column>
       <el-table-column prop="dir" width="60" align="center">
         <template slot-scope="scope">
-          <img :src="setFileImg(scope.row)" style="width: 30px;"/>
+          <img :src="setFileImg(scope.row)" style="height: 30px"/>
         </template>
       </el-table-column>
       <el-table-column prop="filename" :sort-by="['dir', 'filename']" sortable show-overflow-tooltip>

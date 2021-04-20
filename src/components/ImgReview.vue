@@ -201,7 +201,7 @@ export default {
       }
       setAvatar(data).then(
           this.$message({
-            message: '头像设置成功, 重新登录即可生效',
+            message: '头像设置成功, 刷新页面即可生效',
             type: 'success'
           })
       ).catch(err=> {
