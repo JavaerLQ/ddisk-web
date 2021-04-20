@@ -1,7 +1,7 @@
 <template>
   <div class="error-500-wrapper">
     <h2 class="title">服务器出错，请联系管理员！</h2>
-    <img :src="error_500_img" />
+    <img :src="error_500_img">
   </div>
 </template>
 
@@ -18,7 +18,7 @@ export default {
 
 <style lang="stylus" scoped>
 .error-500-wrapper
-  display: initial !important
+  display: block !important
   padding: 100px 0
   text-align: center
   .title

@@ -7,6 +7,10 @@ router.beforeEach((to, from, next) => {
     next()
     return
   }
+  if (to.name.startsWith("Error_")){
+    next(from);
+    return
+  }
   store.dispatch("getUserInfo").then(() => {
     if (to.matched.some(m => m.meta.requireAuth)) {
       if (!store.getters.isLogin) { // 没有登录

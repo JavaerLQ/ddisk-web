@@ -18,7 +18,7 @@ export default {
 
 <style lang="stylus" scoped>
 .error-401-wrapper
-  display: initial !important
+  display: block !important
   padding: 100px 0
   text-align: center
   .title
