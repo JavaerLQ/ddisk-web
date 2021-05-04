@@ -205,10 +205,13 @@ export default {
     // 获取当前路径下的文件列表
     showFileList() {
       let data = {
-        pid: this.currentPath,
         currentPage: this.pageData.currentPage,
         pageCount: this.pageData.pageCount
       }
+      if (this.currentPath != null){
+        data.pid = this.currentPath
+      }
+
       getFileList(data).then((res) => {
         this.reflushFileList(res)
       }).catch(err => {

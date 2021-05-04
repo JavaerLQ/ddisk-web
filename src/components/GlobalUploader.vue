@@ -119,7 +119,7 @@ export default {
         this.statusSet(file.id, "merging")
         mergeFile({
           filename: file.name,
-          // chunkSize: chunk.chunkSize,
+          chunkSize: chunk.chunkSize,
           folderId: this.filePath().current(),
           identifier: file.uniqueIdentifier
         }).then(data => {

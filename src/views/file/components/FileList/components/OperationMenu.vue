@@ -192,7 +192,7 @@ export default {
         this.$store.dispatch('showStorage')
       }).catch(err => {
         console.error(err)
-        this.$message.error("系统忙，恢复失败")
+        this.$message.error("系统忙，删除失败")
       })
     },
     recoverSelectedFile(){

@@ -239,7 +239,8 @@ export default {
         }
         //  若当前点击项是可以使用office在线预览的
         if (['ppt', 'pptx', 'doc', 'docx', 'xls', 'xlsx'].includes(row.extension)) {
-          window.open(this.getFileOnlineViewPathByOffice(row.id), '_blank')
+          // window.open(this.getFileOnlineViewPathByOffice(row.id), '_blank')
+          window.open(this.getDownloadPath(row.id), '_blank')
         }
         //  若当前点击项是pdf
         if (row.extension === 'pdf') {
@@ -251,17 +252,26 @@ export default {
           window.open(this.getDownloadPath(row.id), '_blank')
         }
         //  若当前点击项是视频mp4格式
-        const VIDEO = ['mp4']
-        if (VIDEO.includes(row.extension)) {
-          window.open(this.getDownloadPath(row.id), '_blank')
+        if (this.VIDEO_TYPE_LIST.includes(row.extension)) {
+          let data = {
+            visible: true,
+            url: this.getDownloadPath(row.id),
+            filename: row.filename + '.' + row.extension
+          }
+          this.$store.commit('setVideoReviewData', data)
         }
         //  若当前点击项是视频mp3格式
-        const AUDIO = ['mp3']
-        if (AUDIO.includes(row.extension)) {
-          window.open(this.getDownloadPath(row.id), '_blank')
+        if (this.MUSIC_TYPE_LIST.includes(row.extension)) {
+          let data = {
+            visible: true,
+            url: this.getDownloadPath(row.id),
+            filename: row.filename + '.' + row.extension
+          }
+          this.$store.commit('setVideoReviewData', data)
         }
       }
     },
+
     /**
      * 移动按钮相关事件
      */
