@@ -57,18 +57,25 @@ export default {
         chunkSize: CHUNK_SIZE, // 1M
         fileParameterName: 'file',
         maxChunkRetries: 3,
+        simultaneousUploads: 5, //并发上传数
         forceChunkSize: true,
         testChunks: true,   //是否开启服务器分片校验
         // 服务器分片校验函数，秒传及断点续传基础
-        checkChunkUploadedByResponse: (chunk, data)=>{
-          console.log("==========checkChunkUploadedByResponse=======")
-          console.log(data)
-          let objMessage = JSON.parse(data);
-          if (objMessage.skipUpload) {
+        checkChunkUploadedByResponse: function (chunk, message) {
+          console.log(message)
+          let data = JSON.parse(message);
+          if (data.skipUpload) {
             return true;
           }
-          // offset从0开始，chunkNumber从1开始
-          return (objMessage.uploaded || []).indexOf(chunk.offset + 1) >= 0
+          return (data.uploaded || []).indexOf(chunk.offset + 1) >= 0
+        },
+        parseTimeRemaining: function (timeRemaining, parsedTimeRemaining) {
+          return parsedTimeRemaining
+              .replace(/\syears?/, '年')
+              .replace(/\days?/, '天')
+              .replace(/\shours?/, '小时')
+              .replace(/\sminutes?/, '分钟')
+              .replace(/\sseconds?/, '秒')
         },
         query() {
         }

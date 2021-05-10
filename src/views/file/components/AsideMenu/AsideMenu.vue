@@ -96,7 +96,7 @@ export default {
     // 存储百分比
     storagePercentage() {
       let v = (this.storageUsedValue / this.storageMaxValue) * 100
-      if (v<0){
+      if (v<0 || isNaN(v)){
         v = 0;
       }else if(v>100){
         v = 100;
