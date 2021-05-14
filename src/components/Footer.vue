@@ -37,7 +37,7 @@ export default {
   },
   data() {
     return {
-      logoUrl: require('@/assets/images/common/logo_footer.png'),
+      logoUrl: require('@/assets/images/common/logo.png'),
       wechatImg: require('@/assets/images/footer/wechatImg.png')
     }
   }
