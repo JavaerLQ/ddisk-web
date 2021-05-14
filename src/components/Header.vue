@@ -39,7 +39,7 @@ export default {
   name: 'Header',
   data() {
     return {
-      logoUrl: require('@/assets/images/common/logo_header.png'),
+      logoUrl: require('@/assets/images/common/logo.png'),
       userImgDefault: require('@/assets/images/settings/userImg.png')
     }
   },
