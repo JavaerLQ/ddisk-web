@@ -142,8 +142,8 @@ export default {
       if (this.isLoginPage()){
         return
       }
-      this.setPageCount()
       this.getTableDataByType()
+      this.setPageCount()
     },
     currentFileType(newValue, oldValue) {
       if (this.isLoginPage()){
@@ -152,13 +152,13 @@ export default {
       if (oldValue === this.FILE_TYPE.IMAGE && this.fileModel().isTimeLine()) {
         this.$store.commit('changeFileModel', this.FILE_MODEL.TABLE)
       }
-      this.setPageCount()
       this.getTableDataByType()
+      this.setPageCount()
     },
     // 监听文件查看模式
     currentFileModel() {
-      this.setPageCount()
       this.getTableDataByType()
+      this.setPageCount()
     }
   },
   created() {
@@ -250,8 +250,7 @@ export default {
         fileType: this.fileType().current()
       }
       selectFileByFileType(data).then((res) => {
-        this.fileList = res.data
-        this.loading = false
+        this.reflushFileList(res)
       }).catch(err => {
         console.log(err)
         this.$message.error("服务器正忙")
