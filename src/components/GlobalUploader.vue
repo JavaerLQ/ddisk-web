@@ -62,7 +62,6 @@ export default {
         testChunks: true,   //是否开启服务器分片校验
         // 服务器分片校验函数，秒传及断点续传基础
         checkChunkUploadedByResponse: function (chunk, message) {
-          console.log(message)
           let data = JSON.parse(message);
           if (data.skipUpload) {
             return true;
@@ -78,7 +77,7 @@ export default {
               .replace(/\sseconds?/, '秒')
         },
         query() {
-        }
+        },
       },
       attrs: {
         accept: '*'
@@ -88,11 +87,15 @@ export default {
     }
   },
   mounted() {
-
-    this.$EventBus.$on('openUploader', query => {
-      this.params = query || {};
-      this.$refs.uploadBtn.$el.click()
-    });
+    this.$nextTick(()=>{
+      this.$EventBus.$on('openUploader', query => {
+        this.params = query || {};
+        if (this.$refs.uploadBtn) {
+          this.$refs.uploadBtn.$el.click()
+        }
+      });
+    })
+   
   },
   computed: {
     //Uploader实例
